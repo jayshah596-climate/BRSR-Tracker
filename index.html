@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRSR Tracker - India's ESG Compliance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+
+  /* RGB versions for opacity control */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+
+  /* Background color tokens (Light Mode) */
+  --color-bg-1: rgba(59, 130, 246, 0.08);
+  --color-bg-2: rgba(245, 158, 11, 0.08);
+  --color-bg-3: rgba(34, 197, 94, 0.08);
+  --color-bg-4: rgba(239, 68, 68, 0.08);
+  --color-bg-5: rgba(147, 51, 234, 0.08);
+  --color-bg-6: rgba(249, 115, 22, 0.08);
+  --color-bg-7: rgba(236, 72, 153, 0.08);
+  --color-bg-8: rgba(6, 182, 212, 0.08);
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  --color-success-rgb: 33, 128, 141;
+  --color-error-rgb: 192, 21, 47;
+  --color-warning-rgb: 168, 75, 47;
+  --color-info-rgb: 98, 108, 113;
+
+  /* Typography */
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+
+    --color-bg-1: rgba(29, 78, 216, 0.15);
+    --color-bg-2: rgba(180, 83, 9, 0.15);
+    --color-bg-3: rgba(21, 128, 61, 0.15);
+    --color-bg-4: rgba(185, 28, 28, 0.15);
+    --color-bg-5: rgba(107, 33, 168, 0.15);
+    --color-bg-6: rgba(194, 65, 12, 0.15);
+    --color-bg-7: rgba(190, 24, 93, 0.15);
+    --color-bg-8: rgba(8, 145, 178, 0.15);
+
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2') format('woff2');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+  font-size: var(--font-size-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-24);
+}
+
+/* Header Styles */
+.header {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-teal-700) 100%);
+  color: var(--color-cream-50);
+  padding: var(--space-32) 0;
+  box-shadow: var(--shadow-md);
+}
+
+.header h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-8);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.header p {
+  font-size: var(--font-size-lg);
+  opacity: 0.95;
+  margin-bottom: var(--space-24);
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-16);
+  margin-top: var(--space-24);
+}
+
+.stat-card {
+  background: var(--color-surface);
+  padding: var(--space-20);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-card-border);
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+/* Filter Section */
+.filter-section {
+  background: var(--color-surface);
+  padding: var(--space-24);
+  margin: var(--space-24) 0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-card-border);
+}
+
+.filter-controls {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: var(--space-16);
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-8);
+  color: var(--color-text);
+}
+
+.filter-group input,
+.filter-group select {
+  padding: var(--space-10) var(--space-12);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  background: var(--color-background);
+  color: var(--color-text);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.filter-group select {
+  appearance: none;
+  background-image: var(--select-caret-light);
+  background-repeat: no-repeat;
+  background-position: right var(--space-12) center;
+  background-size: 16px;
+  padding-right: var(--space-32);
+}
+
+@media (prefers-color-scheme: dark) {
+  .filter-group select {
+    background-image: var(--select-caret-dark);
+  }
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+  outline: var(--focus-outline);
+  border-color: var(--color-primary);
+}
+
+.btn {
+  padding: var(--space-10) var(--space-20);
+  border: none;
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  background: var(--color-secondary-hover);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+/* Table Styles */
+.table-container {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-card-border);
+  overflow: hidden;
+  margin: var(--space-24) 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table thead {
+  background: var(--color-bg-1);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.data-table th {
+  padding: var(--space-16);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.data-table th:hover {
+  background: var(--color-bg-2);
+}
+
+.data-table th.sortable::after {
+  content: '⇅';
+  margin-left: var(--space-8);
+  opacity: 0.3;
+}
+
+.data-table th.sort-asc::after {
+  content: '↑';
+  opacity: 1;
+}
+
+.data-table th.sort-desc::after {
+  content: '↓';
+  opacity: 1;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid var(--color-card-border-inner);
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: var(--color-bg-1);
+}
+
+.data-table tbody tr:hover {
+  background: var(--color-bg-2);
+}
+
+.data-table td {
+  padding: var(--space-16);
+  font-size: var(--font-size-base);
+}
+
+.company-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.badge {
+  display: inline-block;
+  padding: var(--space-4) var(--space-12);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.badge-success {
+  background: rgba(var(--color-success-rgb), var(--status-bg-opacity));
+  color: var(--color-success);
+  border: 1px solid rgba(var(--color-success-rgb), var(--status-border-opacity));
+}
+
+.badge-warning {
+  background: rgba(var(--color-warning-rgb), var(--status-bg-opacity));
+  color: var(--color-warning);
+  border: 1px solid rgba(var(--color-warning-rgb), var(--status-border-opacity));
+}
+
+.badge-info {
+  background: rgba(var(--color-info-rgb), var(--status-bg-opacity));
+  color: var(--color-info);
+  border: 1px solid rgba(var(--color-info-rgb), var(--status-border-opacity));
+}
+
+.esg-score {
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-4) var(--space-12);
+  border-radius: var(--radius-base);
+  display: inline-block;
+}
+
+.esg-high {
+  background: rgba(var(--color-success-rgb), 0.15);
+  color: var(--color-success);
+}
+
+.esg-medium {
+  background: rgba(var(--color-warning-rgb), 0.15);
+  color: var(--color-warning);
+}
+
+.esg-low {
+  background: rgba(var(--color-error-rgb), 0.15);
+  color: var(--color-error);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-24);
+}
+
+.pagination button {
+  padding: var(--space-8) var(--space-16);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--color-secondary);
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination button.active {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  border-color: var(--color-primary);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  animation: fadeIn var(--duration-normal) var(--ease-standard);
+}
+
+.modal-overlay.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-24);
+}
+
+.modal {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideUp var(--duration-normal) var(--ease-standard);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: var(--space-24);
+  border-bottom: 1px solid var(--color-card-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: var(--font-size-3xl);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--space-4);
+  line-height: 1;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.modal-close:hover {
+  color: var(--color-text);
+}
+
+.modal-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-card-border);
+  padding: 0 var(--space-24);
+}
+
+.tab-button {
+  padding: var(--space-16) var(--space-24);
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.tab-button:hover {
+  color: var(--color-text);
+}
+
+.tab-button.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.modal-body {
+  padding: var(--space-24);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-20);
+}
+
+.detail-item {
+  background: var(--color-bg-1);
+  padding: var(--space-16);
+  border-radius: var(--radius-base);
+  border: 1px solid var(--color-card-border);
+}
+
+.detail-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-8);
+}
+
+.detail-value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.progress-bar-container {
+  margin-top: var(--space-8);
+  background: var(--color-secondary);
+  border-radius: var(--radius-full);
+  height: 8px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--duration-normal) var(--ease-standard);
+}
+
+/* Charts Section */
+.charts-section {
+  margin: var(--space-32) 0;
+}
+
+.charts-section h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-24);
+  color: var(--color-text);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--space-24);
+}
+
+.chart-card {
+  background: var(--color-surface);
+  padding: var(--space-24);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-card-border);
+}
+
+.chart-card h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-16);
+  color: var(--color-text);
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+}
+
+/* Footer */
+.footer {
+  background: var(--color-surface);
+  padding: var(--space-32) 0;
+  margin-top: var(--space-32);
+  border-top: 1px solid var(--color-card-border);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-24);
+}
+
+.footer-section h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-12);
+  color: var(--color-text);
+}
+
+.footer-section p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-8);
+}
+
+.footer-links a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.footer-links a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .filter-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .data-table {
+    font-size: var(--font-size-sm);
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: var(--space-8);
+  }
+
+  .modal {
+    max-height: 95vh;
+  }
+}
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>BRSR Tracker - India's ESG Compliance Dashboard</h1>
+            <p>Tracking Business Responsibility &amp; Sustainability Reporting for Top 1000 Listed Companies</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Companies</div>
+                    <div class="stat-value" id="stat-total">50</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">BRSR Submitted</div>
+                    <div class="stat-value" id="stat-submitted">40</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">BRSR Core Compliant</div>
+                    <div class="stat-value" id="stat-compliant">27</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg ESG Score</div>
+                    <div class="stat-value" id="stat-avg-esg">73.2</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="search">Search Company</label>
+                    <input type="text" id="search" placeholder="Search by company name...">
+                </div>
+                <div class="filter-group">
+                    <label for="sector-filter">Sector</label>
+                    <select id="sector-filter">
+                        <option value="">All Sectors</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="brsr-filter">BRSR Status</label>
+                    <select id="brsr-filter">
+                        <option value="">All Status</option>
+                        <option value="Submitted">Submitted</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="core-filter">BRSR Core</label>
+                    <select id="core-filter">
+                        <option value="">All Status</option>
+                        <option value="Compliant">Compliant</option>
+                        <option value="In Progress">In Progress</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="assurance-filter">Assurance</label>
+                    <select id="assurance-filter">
+                        <option value="">All Types</option>
+                        <option value="Reasonable Assurance">Reasonable</option>
+                        <option value="Limited Assurance">Limited</option>
+                        <option value="No Assurance">No Assurance</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top: var(--space-16); text-align: right;">
+                <button class="btn btn-secondary" id="clear-filters">Clear Filters</button>
+            </div>
+        </section>
+
+        <!-- Table Section -->
+        <section class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="rank">Rank</th>
+                        <th class="sortable" data-sort="company_name">Company Name</th>
+                        <th class="sortable" data-sort="sector">Sector</th>
+                        <th class="sortable" data-sort="market_cap_cr">Market Cap (₹ Cr)</th>
+                        <th class="sortable" data-sort="brsr_status">BRSR Status</th>
+                        <th class="sortable" data-sort="brsr_core_status">BRSR Core</th>
+                        <th class="sortable" data-sort="esg_score">ESG Score</th>
+                        <th class="sortable" data-sort="assurance">Assurance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Table rows will be inserted here -->
+                </tbody>
+            </table>
+            
+            <div class="pagination" id="pagination">
+                <!-- Pagination buttons will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <h2>Summary Analytics</h2>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Sector Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="sector-chart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>BRSR Compliance Status</h3>
+                    <div class="chart-container">
+                        <canvas id="compliance-chart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>ESG Score Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="esg-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About BRSR</h3>
+                    <p>Business Responsibility and Sustainability Reporting (BRSR) is a framework mandated by SEBI for listed companies to disclose their ESG performance and initiatives.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Data Information</h3>
+                    <p>Data as of FY 2023-24</p>
+                    <p>Source: SEBI, NSE, BSE</p>
+                </div>
+                <div class="footer-section footer-links">
+                    <h3>Resources</h3>
+                    <p><a href="#" target="_blank">SEBI BRSR Guidelines</a></p>
+                    <p><a href="#" target="_blank">ESG Reporting Standards</a></p>
+                    <p><a href="#" target="_blank">Sustainability Framework</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-tabs">
+                <button class="tab-button active" data-tab="overview">Overview</button>
+                <button class="tab-button" data-tab="environmental">Environmental</button>
+                <button class="tab-button" data-tab="social">Social &amp; Governance</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content active" id="tab-overview">
+                    <!-- Overview content will be inserted here -->
+                </div>
+                <div class="tab-content" id="tab-environmental">
+                    <!-- Environmental content will be inserted here -->
+                </div>
+                <div class="tab-content" id="tab-social">
+                    <!-- Social content will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Company Data
+const companiesData = [
+  {rank: 1, company_name: "Reliance Industries Ltd", sector: "Energy & Petrochemicals", market_cap_cr: 2035352, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 48500000, scope2_emissions: 12300000, scope3_disclosed: "Yes", water_consumption: 125000000, renewable_energy_pct: 8.5, women_employees_pct: 12.3, independent_directors_pct: 58.3, esg_score: 72},
+  {rank: 2, company_name: "HDFC Bank Ltd", sector: "Banking & Financial Services", market_cap_cr: 1548507, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 125000, scope2_emissions: 285000, scope3_disclosed: "Yes", water_consumption: 1250000, renewable_energy_pct: 22.5, women_employees_pct: 28.7, independent_directors_pct: 62.5, esg_score: 78},
+  {rank: 3, company_name: "Bharti Airtel Ltd", sector: "Telecommunications", market_cap_cr: 1197699, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 425000, scope2_emissions: 3250000, scope3_disclosed: "Yes", water_consumption: 2850000, renewable_energy_pct: 35.2, women_employees_pct: 18.5, independent_directors_pct: 55.6, esg_score: 75},
+  {rank: 4, company_name: "Tata Consultancy Services Ltd", sector: "IT Services", market_cap_cr: 1106176, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 185000, scope2_emissions: 625000, scope3_disclosed: "Yes", water_consumption: 8500000, renewable_energy_pct: 45.8, women_employees_pct: 36.2, independent_directors_pct: 60.0, esg_score: 82},
+  {rank: 5, company_name: "ICICI Bank Ltd", sector: "Banking & Financial Services", market_cap_cr: 979248, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 98000, scope2_emissions: 245000, scope3_disclosed: "Yes", water_consumption: 1150000, renewable_energy_pct: 18.5, women_employees_pct: 32.5, independent_directors_pct: 58.3, esg_score: 76},
+  {rank: 6, company_name: "State Bank of India", sector: "Banking & Financial Services", market_cap_cr: 867493, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 145000, scope2_emissions: 385000, scope3_disclosed: "Yes", water_consumption: 2250000, renewable_energy_pct: 25.3, women_employees_pct: 24.8, independent_directors_pct: 50.0, esg_score: 74},
+  {rank: 7, company_name: "Bajaj Finance Ltd", sector: "Financial Services", market_cap_cr: 661450, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Limited Assurance", reporting_year: "FY 2023-24", scope1_emissions: 45000, scope2_emissions: 125000, scope3_disclosed: "Partial", water_consumption: 485000, renewable_energy_pct: 12.5, women_employees_pct: 21.3, independent_directors_pct: 54.5, esg_score: 68},
+  {rank: 8, company_name: "Infosys Ltd", sector: "IT Services", market_cap_cr: 627647, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 165000, scope2_emissions: 485000, scope3_disclosed: "Yes", water_consumption: 6850000, renewable_energy_pct: 52.3, women_employees_pct: 39.5, independent_directors_pct: 66.7, esg_score: 85},
+  {rank: 9, company_name: "Hindustan Unilever Ltd", sector: "Consumer Goods", market_cap_cr: 584966, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 285000, scope2_emissions: 425000, scope3_disclosed: "Yes", water_consumption: 15250000, renewable_energy_pct: 38.5, women_employees_pct: 42.5, independent_directors_pct: 63.6, esg_score: 81},
+  {rank: 10, company_name: "Life Insurance Corporation of India", sector: "Insurance", market_cap_cr: 575037, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Limited Assurance", reporting_year: "FY 2023-24", scope1_emissions: 85000, scope2_emissions: 195000, scope3_disclosed: "Partial", water_consumption: 850000, renewable_energy_pct: 15.8, women_employees_pct: 28.5, independent_directors_pct: 54.5, esg_score: 70},
+  {rank: 11, company_name: "Larsen & Toubro Ltd", sector: "Construction & Engineering", market_cap_cr: 544452, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 2850000, scope2_emissions: 1250000, scope3_disclosed: "Yes", water_consumption: 8500000, renewable_energy_pct: 18.5, women_employees_pct: 8.5, independent_directors_pct: 58.3, esg_score: 73},
+  {rank: 12, company_name: "ITC Ltd", sector: "Diversified", market_cap_cr: 528110, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 1850000, scope2_emissions: 985000, scope3_disclosed: "Yes", water_consumption: 45250000, renewable_energy_pct: 42.5, women_employees_pct: 14.8, independent_directors_pct: 61.5, esg_score: 79},
+  {rank: 13, company_name: "Maruti Suzuki India Ltd", sector: "Automotive", market_cap_cr: 507475, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 485000, scope2_emissions: 1250000, scope3_disclosed: "Yes", water_consumption: 12500000, renewable_energy_pct: 22.5, women_employees_pct: 11.2, independent_directors_pct: 50.0, esg_score: 71},
+  {rank: 14, company_name: "Mahindra & Mahindra Ltd", sector: "Automotive", market_cap_cr: 439957, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 385000, scope2_emissions: 985000, scope3_disclosed: "Yes", water_consumption: 8500000, renewable_energy_pct: 28.5, women_employees_pct: 13.5, independent_directors_pct: 54.5, esg_score: 74},
+  {rank: 15, company_name: "Kotak Mahindra Bank Ltd", sector: "Banking & Financial Services", market_cap_cr: 427744, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 52000, scope2_emissions: 185000, scope3_disclosed: "Yes", water_consumption: 685000, renewable_energy_pct: 20.5, women_employees_pct: 35.2, independent_directors_pct: 60.0, esg_score: 77},
+  {rank: 16, company_name: "HCL Technologies Ltd", sector: "IT Services", market_cap_cr: 422752, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 145000, scope2_emissions: 425000, scope3_disclosed: "Yes", water_consumption: 5250000, renewable_energy_pct: 48.5, women_employees_pct: 32.8, independent_directors_pct: 62.5, esg_score: 80},
+  {rank: 17, company_name: "Sun Pharmaceutical Industries Ltd", sector: "Pharmaceuticals", market_cap_cr: 411785, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 285000, scope2_emissions: 685000, scope3_disclosed: "Yes", water_consumption: 18500000, renewable_energy_pct: 25.5, women_employees_pct: 28.5, independent_directors_pct: 55.6, esg_score: 75},
+  {rank: 18, company_name: "Axis Bank Ltd", sector: "Banking & Financial Services", market_cap_cr: 387690, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 85000, scope2_emissions: 225000, scope3_disclosed: "Yes", water_consumption: 985000, renewable_energy_pct: 19.5, women_employees_pct: 30.5, independent_directors_pct: 57.1, esg_score: 75},
+  {rank: 19, company_name: "UltraTech Cement Ltd", sector: "Cement", market_cap_cr: 353199, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 18500000, scope2_emissions: 4850000, scope3_disclosed: "Yes", water_consumption: 28500000, renewable_energy_pct: 15.5, women_employees_pct: 5.8, independent_directors_pct: 50.0, esg_score: 67},
+  {rank: 20, company_name: "Bajaj Finserv Ltd", sector: "Financial Services", market_cap_cr: 341053, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Limited Assurance", reporting_year: "FY 2023-24", scope1_emissions: 38000, scope2_emissions: 98000, scope3_disclosed: "Partial", water_consumption: 385000, renewable_energy_pct: 14.5, women_employees_pct: 22.5, independent_directors_pct: 54.5, esg_score: 69},
+  {rank: 21, company_name: "NTPC Ltd", sector: "Power Generation", market_cap_cr: 338462, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 3856234, scope2_emissions: 1254892, scope3_disclosed: "Partial", water_consumption: 15234890, renewable_energy_pct: 28.7, women_employees_pct: 15.3, independent_directors_pct: 51.4, esg_score: 71},
+  {rank: 22, company_name: "Titan Company Ltd", sector: "Consumer Goods", market_cap_cr: 332582, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 285643, scope2_emissions: 457892, scope3_disclosed: "Yes", water_consumption: 3456789, renewable_energy_pct: 32.8, women_employees_pct: 38.5, independent_directors_pct: 58.3, esg_score: 78},
+  {rank: 23, company_name: "ONGC Ltd", sector: "Oil & Gas", market_cap_cr: 319979, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 25487653, scope2_emissions: 8456234, scope3_disclosed: "Yes", water_consumption: 45678923, renewable_energy_pct: 12.5, women_employees_pct: 9.8, independent_directors_pct: 50.0, esg_score: 69},
+  {rank: 24, company_name: "Adani Power Ltd", sector: "Power Generation", market_cap_cr: 316462, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Limited Assurance", reporting_year: "FY 2023-24", scope1_emissions: 4567823, scope2_emissions: 1234567, scope3_disclosed: "No", water_consumption: 18456732, renewable_energy_pct: 8.5, women_employees_pct: 11.2, independent_directors_pct: 48.5, esg_score: 65},
+  {rank: 25, company_name: "Power Grid Corporation", sector: "Power Transmission", market_cap_cr: 285450, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 654782, scope2_emissions: 2345678, scope3_disclosed: "Partial", water_consumption: 4567892, renewable_energy_pct: 35.8, women_employees_pct: 16.5, independent_directors_pct: 54.5, esg_score: 73},
+  {rank: 26, company_name: "Tech Mahindra Ltd", sector: "IT Services", market_cap_cr: 275380, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 156783, scope2_emissions: 487652, scope3_disclosed: "Yes", water_consumption: 6785432, renewable_energy_pct: 42.5, women_employees_pct: 34.2, independent_directors_pct: 60.0, esg_score: 79},
+  {rank: 27, company_name: "Wipro Ltd", sector: "IT Services", market_cap_cr: 268950, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 178654, scope2_emissions: 523456, scope3_disclosed: "Yes", water_consumption: 7234567, renewable_energy_pct: 48.5, women_employees_pct: 37.8, independent_directors_pct: 62.5, esg_score: 81},
+  {rank: 28, company_name: "Asian Paints Ltd", sector: "Paints & Coatings", market_cap_cr: 258470, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 456782, scope2_emissions: 876543, scope3_disclosed: "Yes", water_consumption: 8567234, renewable_energy_pct: 28.5, women_employees_pct: 18.5, independent_directors_pct: 55.6, esg_score: 74},
+  {rank: 29, company_name: "Adani Enterprises Ltd", sector: "Diversified", market_cap_cr: 245680, brsr_status: "Submitted", brsr_core_status: "In Progress", assurance: "Limited Assurance", reporting_year: "FY 2023-24", scope1_emissions: 3456782, scope2_emissions: 1876543, scope3_disclosed: "Partial", water_consumption: 12345678, renewable_energy_pct: 18.5, women_employees_pct: 12.8, independent_directors_pct: 50.0, esg_score: 68},
+  {rank: 30, company_name: "Tata Steel Ltd", sector: "Steel", market_cap_cr: 238560, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 28456732, scope2_emissions: 9876543, scope3_disclosed: "Yes", water_consumption: 38765432, renewable_energy_pct: 15.8, women_employees_pct: 9.2, independent_directors_pct: 54.5, esg_score: 70},
+  {rank: 31, company_name: "Coal India Ltd", sector: "Mining", market_cap_cr: 225480, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 32456789, scope2_emissions: 8765432, scope3_disclosed: "Partial", water_consumption: 28456789, renewable_energy_pct: 10.5, women_employees_pct: 6.8, independent_directors_pct: 50.0, esg_score: 66},
+  {rank: 32, company_name: "JSW Steel Ltd", sector: "Steel", market_cap_cr: 218750, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 24567832, scope2_emissions: 7856234, scope3_disclosed: "Yes", water_consumption: 32456789, renewable_energy_pct: 18.5, women_employees_pct: 8.5, independent_directors_pct: 52.5, esg_score: 71},
+  {rank: 33, company_name: "Hindalco Industries Ltd", sector: "Metals", market_cap_cr: 195860, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 12456789, scope2_emissions: 5678234, scope3_disclosed: "Yes", water_consumption: 18765432, renewable_energy_pct: 22.5, women_employees_pct: 10.5, independent_directors_pct: 54.5, esg_score: 72},
+  {rank: 34, company_name: "Grasim Industries Ltd", sector: "Diversified", market_cap_cr: 185470, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 8567234, scope2_emissions: 4567892, scope3_disclosed: "Yes", water_consumption: 15678923, renewable_energy_pct: 25.5, women_employees_pct: 12.5, independent_directors_pct: 55.6, esg_score: 73},
+  {rank: 35, company_name: "Bajaj Auto Ltd", sector: "Automotive", market_cap_cr: 178650, brsr_status: "Submitted", brsr_core_status: "Compliant", assurance: "Reasonable Assurance", reporting_year: "FY 2023-24", scope1_emissions: 567823, scope2_emissions: 1234567, scope3_disclosed: "Yes", water_consumption: 6789234, renewable_energy_pct: 28.5, women_employees_pct: 14.2, independent_directors_pct: 54.5, esg_score: 74},
+  {rank: 36, company_name: "Nestle India Ltd", sector: "Consumer Goods", market_cap_cr: 168950, brsr_status: "Submitted", brsr_core_status: "In Progress", assurance: "Limited Assurance", reporting_year: "FY 2023-24", scope1_emissions: 456782, scope2_emissions: 876543, scope3_disclosed: "Partial", water_consumption: 12345678, renewable_energy_pct: 35.5, women_employees_pct: 32.5, independent_directors_pct: 58.3, esg_score: 76},
+  {rank: 37, company_name: "Dr. Reddy's Laboratories", sector: "Pharmaceuticals", market_cap_cr: 158760, brsr_status: "Submitted", brsr_core_status: "In Progress", assurance: "Limited Assurance", reporting_year: "FY 2023-24", scope1_emissions: 345678, scope2_emissions: 765432, scope3_disclosed: "Yes", water_consumption: 8765432, renewable_energy_pct: 28.5, women_employees_pct: 28.5, independent_directors_pct: 55.6, esg_score: 74},
+  {rank: 38, company_name: "Cipla Ltd", sector: "Pharmaceuticals", market_cap_cr: 148950, brsr_status: "Submitted", brsr_core_status: "In Progress", assurance: "Limited Assurance", reporting_year: "FY 2023-24", scope1_emissions: 287654, scope2_emissions: 654321, scope3_disclosed: "Partial", water_consumption: 7654321, renewable_energy_pct: 32.5, women_employees_pct: 30.5, independent_directors_pct: 57.1, esg_score: 75},
+  {rank: 39, company_name: "Adani Green Energy Ltd", sector: "Renewable Energy", market_cap_cr: 142580, brsr_status: "Submitted", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 125678, scope2_emissions: 345678, scope3_disclosed: "No", water_consumption: 3456789, renewable_energy_pct: 85.5, women_employees_pct: 18.5, independent_directors_pct: 50.0, esg_score: 78},
+  {rank: 40, company_name: "Bharti Infratel Ltd", sector: "Infrastructure", market_cap_cr: 138760, brsr_status: "Submitted", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 234567, scope2_emissions: 567892, scope3_disclosed: "Partial", water_consumption: 2345678, renewable_energy_pct: 42.5, women_employees_pct: 22.5, independent_directors_pct: 52.5, esg_score: 72},
+  {rank: 41, company_name: "Shree Cement Ltd", sector: "Cement", market_cap_cr: 135480, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 15678923, scope2_emissions: 4567892, scope3_disclosed: "No", water_consumption: 22345678, renewable_energy_pct: 18.5, women_employees_pct: 7.5, independent_directors_pct: 50.0, esg_score: 68},
+  {rank: 42, company_name: "IndusInd Bank Ltd", sector: "Banking & Financial Services", market_cap_cr: 128950, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 76543, scope2_emissions: 198765, scope3_disclosed: "Partial", water_consumption: 785432, renewable_energy_pct: 22.5, women_employees_pct: 28.5, independent_directors_pct: 54.5, esg_score: 73},
+  {rank: 43, company_name: "Vedanta Ltd", sector: "Mining & Metals", market_cap_cr: 125680, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 18765432, scope2_emissions: 6789234, scope3_disclosed: "No", water_consumption: 28765432, renewable_energy_pct: 12.5, women_employees_pct: 8.5, independent_directors_pct: 48.5, esg_score: 65},
+  {rank: 44, company_name: "Tata Motors Ltd", sector: "Automotive", market_cap_cr: 118750, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 1876543, scope2_emissions: 3456789, scope3_disclosed: "Partial", water_consumption: 18765432, renewable_energy_pct: 25.5, women_employees_pct: 12.5, independent_directors_pct: 52.5, esg_score: 71},
+  {rank: 45, company_name: "Eicher Motors Ltd", sector: "Automotive", market_cap_cr: 115860, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 345678, scope2_emissions: 876543, scope3_disclosed: "No", water_consumption: 4567892, renewable_energy_pct: 18.5, women_employees_pct: 15.5, independent_directors_pct: 50.0, esg_score: 69},
+  {rank: 46, company_name: "DLF Ltd", sector: "Real Estate", market_cap_cr: 108950, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 456789, scope2_emissions: 987654, scope3_disclosed: "No", water_consumption: 6789234, renewable_energy_pct: 15.5, women_employees_pct: 18.5, independent_directors_pct: 48.5, esg_score: 67},
+  {rank: 47, company_name: "SBI Life Insurance", sector: "Insurance", market_cap_cr: 105780, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 87654, scope2_emissions: 198765, scope3_disclosed: "Partial", water_consumption: 876543, renewable_energy_pct: 18.5, women_employees_pct: 32.5, independent_directors_pct: 54.5, esg_score: 72},
+  {rank: 48, company_name: "ICICI Lombard General Insurance", sector: "Insurance", market_cap_cr: 98650, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 65432, scope2_emissions: 176543, scope3_disclosed: "No", water_consumption: 654321, renewable_energy_pct: 22.5, women_employees_pct: 35.5, independent_directors_pct: 57.1, esg_score: 74},
+  {rank: 49, company_name: "Godrej Consumer Products", sector: "Consumer Goods", market_cap_cr: 95480, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 234567, scope2_emissions: 456789, scope3_disclosed: "Partial", water_consumption: 5678923, renewable_energy_pct: 32.5, women_employees_pct: 38.5, independent_directors_pct: 58.3, esg_score: 75},
+  {rank: 50, company_name: "Siemens Ltd", sector: "Industrial Manufacturing", market_cap_cr: 88750, brsr_status: "Pending", brsr_core_status: "In Progress", assurance: "No Assurance", reporting_year: "FY 2023-24", scope1_emissions: 198765, scope2_emissions: 432178, scope3_disclosed: "No", water_consumption: 3456789, renewable_energy_pct: 38.5, women_employees_pct: 28.5, independent_directors_pct: 60.0, esg_score: 76}
+];
+
+// Global state
+let filteredData = [...companiesData];
+let currentPage = 1;
+const rowsPerPage = 10;
+let sortColumn = '';
+let sortDirection = 'asc';
+
+// Utility functions
+function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function getESGClass(score) {
+    if (score >= 76) return 'esg-high';
+    if (score >= 65) return 'esg-medium';
+    return 'esg-low';
+}
+
+function getBadgeClass(status) {
+    if (status === 'Submitted' || status === 'Compliant' || status === 'Yes') return 'badge-success';
+    if (status === 'Pending' || status === 'In Progress' || status === 'Partial') return 'badge-warning';
+    return 'badge-info';
+}
+
+// Initialize page
+function init() {
+    populateSectorFilter();
+    updateStats();
+    renderTable();
+    renderCharts();
+    setupEventListeners();
+}
+
+// Populate sector filter dropdown
+function populateSectorFilter() {
+    const sectors = [...new Set(companiesData.map(c => c.sector))].sort();
+    const sectorFilter = document.getElementById('sector-filter');
+    sectors.forEach(sector => {
+        const option = document.createElement('option');
+        option.value = sector;
+        option.textContent = sector;
+        sectorFilter.appendChild(option);
+    });
+}
+
+// Update statistics
+function updateStats() {
+    const totalCompanies = filteredData.length;
+    const submitted = filteredData.filter(c => c.brsr_status === 'Submitted').length;
+    const compliant = filteredData.filter(c => c.brsr_core_status === 'Compliant').length;
+    const avgESG = totalCompanies > 0 
+        ? (filteredData.reduce((sum, c) => sum + c.esg_score, 0) / totalCompanies).toFixed(1) 
+        : 0;
+
+    document.getElementById('stat-total').textContent = totalCompanies;
+    document.getElementById('stat-submitted').textContent = submitted;
+    document.getElementById('stat-compliant').textContent = compliant;
+    document.getElementById('stat-avg-esg').textContent = avgESG;
+}
+
+// Filter data
+function applyFilters() {
+    const searchTerm = document.getElementById('search').value.toLowerCase();
+    const sectorFilter = document.getElementById('sector-filter').value;
+    const brsrFilter = document.getElementById('brsr-filter').value;
+    const coreFilter = document.getElementById('core-filter').value;
+    const assuranceFilter = document.getElementById('assurance-filter').value;
+
+    filteredData = companiesData.filter(company => {
+        const matchesSearch = company.company_name.toLowerCase().includes(searchTerm);
+        const matchesSector = !sectorFilter || company.sector === sectorFilter;
+        const matchesBRSR = !brsrFilter || company.brsr_status === brsrFilter;
+        const matchesCore = !coreFilter || company.brsr_core_status === coreFilter;
+        const matchesAssurance = !assuranceFilter || company.assurance === assuranceFilter;
+        
+        return matchesSearch && matchesSector && matchesBRSR && matchesCore && matchesAssurance;
+    });
+
+    currentPage = 1;
+    updateStats();
+    renderTable();
+}
+
+// Sort data
+function sortData(column) {
+    if (sortColumn === column) {
+        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortColumn = column;
+        sortDirection = 'asc';
+    }
+
+    filteredData.sort((a, b) => {
+        let aVal = a[column];
+        let bVal = b[column];
+
+        if (typeof aVal === 'string') {
+            aVal = aVal.toLowerCase();
+            bVal = bVal.toLowerCase();
+        }
+
+        if (sortDirection === 'asc') {
+            return aVal > bVal ? 1 : -1;
+        } else {
+            return aVal < bVal ? 1 : -1;
+        }
+    });
+
+    renderTable();
+}
+
+// Render table
+function renderTable() {
+    const tbody = document.getElementById('table-body');
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const pageData = filteredData.slice(startIndex, endIndex);
+
+    tbody.innerHTML = pageData.map(company => `
+        <tr>
+            <td>${company.rank}</td>
+            <td class="company-name">${company.company_name}</td>
+            <td>${company.sector}</td>
+            <td>₹${formatNumber(company.market_cap_cr)}</td>
+            <td><span class="badge ${getBadgeClass(company.brsr_status)}">${company.brsr_status}</span></td>
+            <td><span class="badge ${getBadgeClass(company.brsr_core_status)}">${company.brsr_core_status}</span></td>
+            <td><span class="esg-score ${getESGClass(company.esg_score)}">${company.esg_score}</span></td>
+            <td>${company.assurance}</td>
+            <td><button class="btn btn-primary btn-sm" onclick="showModal(${company.rank})">View Details</button></td>
+        </tr>
+    `).join('');
+
+    renderPagination();
+    updateSortHeaders();
+}
+
+// Update sort headers
+function updateSortHeaders() {
+    document.querySelectorAll('.data-table th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.sort === sortColumn) {
+            th.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+        }
+    });
+}
+
+// Render pagination
+function renderPagination() {
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    const pagination = document.getElementById('pagination');
+
+    let html = `
+        <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">&laquo; Previous</button>
+    `;
+
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+    
+    if (endPage - startPage < maxButtons - 1) {
+        startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        html += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+    }
+
+    html += `
+        <button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">Next &raquo;</button>
+    `;
+
+    pagination.innerHTML = html;
+}
+
+// Change page
+function changePage(page) {
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        renderTable();
+    }
+}
+
+// Show modal
+function showModal(rank) {
+    const company = companiesData.find(c => c.rank === rank);
+    if (!company) return;
+
+    document.getElementById('modal-title').textContent = `${company.company_name} (Rank #${company.rank})`;
+
+    // Overview tab
+    document.getElementById('tab-overview').innerHTML = `
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="detail-label">Market Capitalization</div>
+                <div class="detail-value">₹${formatNumber(company.market_cap_cr)} Cr</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Sector</div>
+                <div class="detail-value">${company.sector}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Reporting Year</div>
+                <div class="detail-value">${company.reporting_year}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">BRSR Status</div>
+                <div class="detail-value"><span class="badge ${getBadgeClass(company.brsr_status)}">${company.brsr_status}</span></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">BRSR Core Status</div>
+                <div class="detail-value"><span class="badge ${getBadgeClass(company.brsr_core_status)}">${company.brsr_core_status}</span></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Assurance Type</div>
+                <div class="detail-value">${company.assurance}</div>
+            </div>
+        </div>
+    `;
+
+    // Environmental tab
+    document.getElementById('tab-environmental').innerHTML = `
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="detail-label">Scope 1 Emissions</div>
+                <div class="detail-value">${formatNumber(company.scope1_emissions)} tCO2e</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Scope 2 Emissions</div>
+                <div class="detail-value">${formatNumber(company.scope2_emissions)} tCO2e</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Scope 3 Disclosed</div>
+                <div class="detail-value"><span class="badge ${getBadgeClass(company.scope3_disclosed)}">${company.scope3_disclosed}</span></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Water Consumption</div>
+                <div class="detail-value">${formatNumber(company.water_consumption)} KL</div>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;">
+                <div class="detail-label">Renewable Energy Usage</div>
+                <div class="detail-value">${company.renewable_energy_pct}%</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: ${company.renewable_energy_pct}%"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Social & Governance tab
+    document.getElementById('tab-social').innerHTML = `
+        <div class="detail-grid">
+            <div class="detail-item" style="grid-column: 1 / -1;">
+                <div class="detail-label">Women Employees</div>
+                <div class="detail-value">${company.women_employees_pct}%</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: ${company.women_employees_pct}%"></div>
+                </div>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;">
+                <div class="detail-label">Independent Directors</div>
+                <div class="detail-value">${company.independent_directors_pct}%</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: ${company.independent_directors_pct}%"></div>
+                </div>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1; text-align: center; padding: var(--space-24);">
+                <div class="detail-label">ESG Score</div>
+                <div class="detail-value" style="font-size: var(--font-size-4xl); margin-top: var(--space-16);">
+                    <span class="esg-score ${getESGClass(company.esg_score)}">${company.esg_score}</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('modal-overlay').classList.add('active');
+}
+
+// Close modal
+function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+}
+
+// Render charts
+function renderCharts() {
+    renderSectorChart();
+    renderComplianceChart();
+    renderESGChart();
+}
+
+function renderSectorChart() {
+    const sectorCounts = {};
+    companiesData.forEach(company => {
+        sectorCounts[company.sector] = (sectorCounts[company.sector] || 0) + 1;
+    });
+
+    const sortedSectors = Object.entries(sectorCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10);
+
+    const ctx = document.getElementById('sector-chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: sortedSectors.map(s => s[0]),
+            datasets: [{
+                label: 'Number of Companies',
+                data: sortedSectors.map(s => s[1]),
+                backgroundColor: ['#1FB8CD', '#FFC185', '#B4413C', '#ECEBD5', '#5D878F', '#DB4545', '#D2BA4C', '#964325', '#944454', '#13343B']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+}
+
+function renderComplianceChart() {
+    const submitted = companiesData.filter(c => c.brsr_status === 'Submitted').length;
+    const pending = companiesData.filter(c => c.brsr_status === 'Pending').length;
+
+    const ctx = document.getElementById('compliance-chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Submitted', 'Pending'],
+            datasets: [{
+                data: [submitted, pending],
+                backgroundColor: ['#1FB8CD', '#FFC185']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+function renderESGChart() {
+    const ranges = {
+        'Below 65': companiesData.filter(c => c.esg_score < 65).length,
+        '65-75': companiesData.filter(c => c.esg_score >= 65 && c.esg_score < 76).length,
+        'Above 75': companiesData.filter(c => c.esg_score >= 76).length
+    };
+
+    const ctx = document.getElementById('esg-chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(ranges),
+            datasets: [{
+                label: 'Number of Companies',
+                data: Object.values(ranges),
+                backgroundColor: ['#B4413C', '#FFC185', '#1FB8CD']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Filter controls
+    document.getElementById('search').addEventListener('input', applyFilters);
+    document.getElementById('sector-filter').addEventListener('change', applyFilters);
+    document.getElementById('brsr-filter').addEventListener('change', applyFilters);
+    document.getElementById('core-filter').addEventListener('change', applyFilters);
+    document.getElementById('assurance-filter').addEventListener('change', applyFilters);
+
+    // Clear filters
+    document.getElementById('clear-filters').addEventListener('click', () => {
+        document.getElementById('search').value = '';
+        document.getElementById('sector-filter').value = '';
+        document.getElementById('brsr-filter').value = '';
+        document.getElementById('core-filter').value = '';
+        document.getElementById('assurance-filter').value = '';
+        applyFilters();
+    });
+
+    // Sort columns
+    document.querySelectorAll('.data-table th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            sortData(th.dataset.sort);
+        });
+    });
+
+    // Modal controls
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('modal-overlay').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('modal-overlay')) {
+            closeModal();
+        }
+    });
+
+    // Tab switching
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Add active class to clicked tab
+            button.classList.add('active');
+            document.getElementById(`tab-${button.dataset.tab}`).classList.add('active');
+        });
+    });
+}
+
+// Initialize the application
+init();
+    </script>
+</body>
+</html>
